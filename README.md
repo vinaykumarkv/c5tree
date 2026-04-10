@@ -164,4 +164,4 @@ Contributions are very welcome! Please open an issue before submitting a PR.
 
 ## Licence
 
-GNU General Public License v3.0 — see [LICENSE](LICENSE).
+MIT License — see [LICENSE](LICENSE).
