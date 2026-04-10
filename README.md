@@ -164,4 +164,4 @@ Contributions are very welcome! Please open an issue before submitting a PR.
 
 ## Licence
 
-MIT License — see [LICENSE](LICENSE).
+GPL-3.0-or-later License — see [LICENSE](LICENSE).

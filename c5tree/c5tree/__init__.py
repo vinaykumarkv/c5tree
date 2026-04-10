@@ -20,3 +20,4 @@ from ._classifier import C5Classifier
 __all__ = ["C5Classifier"]
 __version__ = "0.1.0"
 __author__ = "c5tree contributors"
+__license__ = "GPL-3.0-or-later"
