@@ -18,5 +18,5 @@ array([0, 0, 0])
 from ._classifier import C5Classifier
 
 __all__ = ["C5Classifier"]
-__version__ = "0.1.0"
+__version__ = "0.2.0"
 __author__ = "c5tree contributors"

@@ -1,20 +1,20 @@
 [build-system]
-requires = ["setuptools>=68", "wheel"]
+requires = ["setuptools>=68", "wheel", "pybind11>=2.11"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "c5tree"
-version = "0.1.0"
+version = "0.2.0"
 description = "C5.0 Decision Tree Classifier — a pure-Python, scikit-learn-compatible implementation"
 readme = "README.md"
-license = { text = "GPL-3.0-or-later" }
+license = "GPL-3.0-or-later"
+license-files = ["LICENSE"]
 requires-python = ">=3.10"
 keywords = ["machine learning", "decision tree", "C5.0", "scikit-learn", "classification"]
 classifiers = [
     "Development Status :: 3 - Alpha",
     "Intended Audience :: Science/Research",
     "Intended Audience :: Developers",
-    "License :: OSI Approved :: GNU General Public License v3 or later (GPLv3+)",
     "Programming Language :: Python :: 3",
     "Programming Language :: Python :: 3.10",
     "Programming Language :: Python :: 3.11",
@@ -42,13 +42,13 @@ docs = [
 ]
 
 [project.urls]
-Homepage = "https://github.com/yourusername/c5tree"
-Repository = "https://github.com/yourusername/c5tree"
-"Bug Tracker" = "https://github.com/yourusername/c5tree/issues"
+Homepage = "https://github.com/vinaykumarkv/c5tree"
+Repository = "https://github.com/vinaykumarkv/c5tree"
+"Bug Tracker" = "https://github.com/vinaykumarkv/c5tree/issues"
 
 [tool.setuptools.packages.find]
 where = ["."]
-include = ["c5tree*"]
+include = ["c5tree"]
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]

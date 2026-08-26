@@ -13,6 +13,11 @@ from __future__ import annotations
 import numpy as np
 from typing import Optional, Tuple, List
 
+try:
+    from ._splitter_fast import best_continuous_split as _best_continuous_split_fast
+except ImportError:
+    _best_continuous_split_fast = None
+
 
 # ---------------------------------------------------------------------------
 # Entropy helpers
@@ -43,7 +48,7 @@ def _weighted_entropy(left_counts: np.ndarray, right_counts: np.ndarray) -> floa
 # Gain ratio for a continuous feature
 # ---------------------------------------------------------------------------
 
-def best_continuous_split(
+def _best_continuous_split_python(
     x: np.ndarray,
     y: np.ndarray,
     weights: np.ndarray,
@@ -128,6 +133,23 @@ def best_continuous_split(
             best_threshold = threshold
 
     return best_threshold, max(best_gain_ratio, 0.0)
+
+
+def best_continuous_split(
+    x: np.ndarray,
+    y: np.ndarray,
+    weights: np.ndarray,
+    n_classes: int,
+) -> Tuple[Optional[float], float]:
+    """Find a continuous split using the optional native kernel when present."""
+    if _best_continuous_split_fast is not None:
+        return _best_continuous_split_fast(
+            np.asarray(x, dtype=np.float64),
+            np.asarray(y, dtype=np.int64),
+            np.asarray(weights, dtype=np.float64),
+            n_classes,
+        )
+    return _best_continuous_split_python(x, y, weights, n_classes)
 
 
 # ---------------------------------------------------------------------------

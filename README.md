@@ -1,6 +1,6 @@
 # c5tree 🌳
 
-**C5.0 Decision Tree Classifier for Python** — a pure-Python, scikit-learn-compatible implementation of Ross Quinlan's C5.0 algorithm.
+**C5.0 Decision Tree Classifier for Python** — a scikit-learn-compatible implementation of Ross Quinlan's C5.0 algorithm, with an optional native C++ numeric splitter.
 
 [![PyPI version](https://badge.fury.io/py/c5tree.svg)](https://pypi.org/project/c5tree/)
 [![Python](https://img.shields.io/badge/python-3.10%20%7C%203.11%20%7C%203.12-blue)](https://pypi.org/project/c5tree/)
@@ -55,6 +55,9 @@ print(f"Leaves: {clf.get_n_leaves()}")
 ### Gain Ratio Splitting
 Corrects ID3's bias toward features with many distinct values by normalising information gain by split information.
 
+### Optional Native Acceleration
+Numeric split evaluation uses an optional C++ extension through pybind11 when a compiler is available. Standard installs remain supported without a compiler and automatically use the equivalent Python implementation. This keeps C5.0 gain-ratio behavior while accelerating its hottest numeric operation; it is not a LightGBM or XGBoost model.
+
 ### Native Missing Value Handling
 No imputation needed. Missing instances are distributed fractionally across branches, weighted by the proportion of known instances going each way.
 
@@ -107,8 +110,8 @@ print(clf.text_report())
 #       ...
 ```
 
-### Full sklearn Compatibility
-Works in Pipelines, `GridSearchCV`, `cross_val_score`, and `clone`:
+### Tested sklearn Compatibility
+The tested estimator workflows include Pipelines, `GridSearchCV`, `cross_val_score`, and `clone`:
 
 ```python
 from sklearn.pipeline import Pipeline
@@ -144,15 +147,24 @@ print(search.best_params_)
 ## Running Tests
 
 ```bash
-pip install c5tree[dev]
+python -m pip install -e ".[dev]"
 pytest tests/ -v --cov=c5tree
 ```
+
+## Building Packages
+
+```bash
+python -m pip install build
+python -m build
+```
+
+The wheel includes the native C++ splitter when it can be compiled. Installing from source without a supported compiler still succeeds and uses the Python fallback. Binary wheels can be published for each supported operating system and Python version, as with LightGBM and XGBoost, so most users do not need a compiler.
 
 ---
 
 ## Background
 
-C5.0 is the successor to C4.5 and ID3, developed by Ross Quinlan. The algorithm was open-sourced in 2011 under the GPL licence. This package is a clean pure-Python reimplementation, making C5.0 accessible to the Python data-science ecosystem for the first time as a proper scikit-learn-compatible estimator.
+C5.0 is the successor to C4.5 and ID3, developed by Ross Quinlan. The algorithm was open-sourced in 2011 under the GPL licence. This package is a clean Python reimplementation that integrates C5.0-style splitting with the scikit-learn estimator API.
 
 **Reference:** Quinlan, J.R. (1993). *C4.5: Programs for Machine Learning*. Morgan Kaufmann.
 

@@ -9,7 +9,8 @@ from sklearn.datasets import load_iris, load_breast_cancer, load_wine
 from sklearn.model_selection import cross_val_score, train_test_split
 from sklearn.utils.estimator_checks import parametrize_with_checks
 
-from c5tree import C5Classifier
+from c5tree import C5Classifier, __version__
+from c5tree._splitter import best_continuous_split, _best_continuous_split_python
 
 
 # -----------------------------------------------------------------------
@@ -39,6 +40,9 @@ def wine():
 # -----------------------------------------------------------------------
 
 class TestBasicFunctionality:
+    def test_version(self):
+        assert __version__ == "0.2.0"
+
     def test_fit_predict_iris(self, iris):
         X_train, X_test, y_train, y_test = iris
         clf = C5Classifier()
@@ -84,6 +88,24 @@ class TestBasicFunctionality:
         X_train, _, y_train, _ = iris
         clf = C5Classifier().fit(X_train, y_train)
         assert clf.n_features_in_ == 4
+
+
+class TestContinuousSplitter:
+    def test_splitter_handles_nan_and_fractional_weights(self):
+        x = np.array([0.0, 1.0, np.nan, 3.0])
+        y = np.array([0, 0, 1, 1])
+        weights = np.array([1.0, 0.5, 1.0, 1.5])
+
+        native_or_fallback = best_continuous_split(x, y, weights, 2)
+        python_reference = _best_continuous_split_python(x, y, weights, 2)
+        assert native_or_fallback[0] == pytest.approx(python_reference[0])
+        assert native_or_fallback[1] == pytest.approx(python_reference[1])
+
+    def test_constant_feature_has_no_split(self):
+        result = best_continuous_split(
+            np.ones(4), np.array([0, 1, 0, 1]), np.ones(4), 2
+        )
+        assert result == (None, 0.0)
 
 
 # -----------------------------------------------------------------------
